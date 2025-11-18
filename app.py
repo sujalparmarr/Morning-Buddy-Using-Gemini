@@ -147,8 +147,8 @@ def interest_news_page():
 
         # If no articles returned
             if not articles:
-            st.error("No news found. Try a different topic.")
-            return
+                st.error("No news found. Try a different topic.")
+                return
 
         # Limit to max 5
             articles = articles[:5]
@@ -164,12 +164,12 @@ def interest_news_page():
                 if not img_item or img_item.endswith(".gif"):
                     img_item = "https://via.placeholder.com/400x250.png?text=No+Image"
 
-            with st.container():
-                st.markdown(f"### 📰 {title_item}")
-                st.image(img_item, use_container_width=True)
-                st.write("🔗 Read Article:", url_item)
-                st.write("📝 Summary:", news_summarizer(url_item))
-                st.markdown("---")
+                with st.container():
+                    st.markdown(f"### 📰 {title_item}")
+                    st.image(img_item, use_container_width=True)
+                    st.write("🔗 Read Article:", url_item)
+                    st.write("📝 Summary:", news_summarizer(url_item))
+                    st.markdown("---")
     else:
         st.error("Please enter an area of interest.")
 
@@ -209,4 +209,5 @@ elif page_option == "Plan My Day":
     
 
     
+
 
