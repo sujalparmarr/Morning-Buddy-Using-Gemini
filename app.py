@@ -142,28 +142,27 @@ def interest_news_page():
     interest = st.text_input("Enter your area of interest (e.g., Technology, Sports, Health):", "Technology")
 
     if st.button("Fetch News"):
+        if interest:
+            articles = get_news(interest)
 
-    if interest:
-        articles = get_news(interest)
-
-        # If no articles at all
-        if not articles:
-            st.error("No news found. Please try a different topic.")
+        # If no articles returned
+            if not articles:
+            st.error("No news found. Try a different topic.")
             return
 
         # Limit to max 5
-        articles = articles[:5]
+            articles = articles[:5]
 
-        st.subheader("Latest News")
+            st.subheader("Latest News")
 
-        for i, article in enumerate(articles):
-            title_item = article.get("title", "No Title")
-            url_item = article.get("url", "")
-            img_item = article.get("urlToImage", None)
+            for i, article in enumerate(articles):
+                title_item = article.get("title", "No Title")
+                url_item = article.get("url", "")
+                img_item = article.get("urlToImage", None)
 
-            # Fix invalid or missing images
-            if not img_item or img_item.endswith(".gif"):
-                img_item = "https://via.placeholder.com/400x250.png?text=No+Image"
+            # Fix missing or invalid images
+                if not img_item or img_item.endswith(".gif"):
+                    img_item = "https://via.placeholder.com/400x250.png?text=No+Image"
 
             with st.container():
                 st.markdown(f"### 📰 {title_item}")
@@ -171,9 +170,10 @@ def interest_news_page():
                 st.write("🔗 Read Article:", url_item)
                 st.write("📝 Summary:", news_summarizer(url_item))
                 st.markdown("---")
-
     else:
-        st.error("Please enter an interest topic.")
+        st.error("Please enter an area of interest.")
+
+
 
 
 
@@ -209,3 +209,4 @@ elif page_option == "Plan My Day":
     
 
     
+
