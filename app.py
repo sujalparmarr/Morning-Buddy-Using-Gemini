@@ -142,69 +142,39 @@ def interest_news_page():
     interest = st.text_input("Enter your area of interest (e.g., Technology, Sports, Health):", "Technology")
 
     if st.button("Fetch News"):
-        if interest:
-            articles= get_news(interest)
-            title=[]
-            url=[]
-            image_url=[]
-            for i in articles:
-                title.append(i["title"])
-                url.append(i['url'])
-                image_url.append(i["urlToImage"])
 
-            if not articles:
-                st.error("No news found.")
-            col1, col2, col3, col4, col5= st.columns(5)
-            with col1:
-                st.subheader(title[0])
-                st.markdown("---")
-                st.image(image_url[0])
-                st.markdown("---")
-                st.write("Read full article here.", url[0])
-                st.markdown("---")
-                st.write(news_summarizer(url[0]))
+    if interest:
+        articles = get_news(interest)
 
-            with col2:
-                st.subheader(title[1])
-                st.markdown("---")
-                st.image(image_url[1])
-                st.markdown("---")
-                st.write("Read full article here.", url[1])
-                st.markdown("---")
-                st.write(news_summarizer(url[1]))
+        # If no articles at all
+        if not articles:
+            st.error("No news found. Please try a different topic.")
+            return
 
+        # Limit to max 5
+        articles = articles[:5]
 
-            with col3:
-                st.subheader(title[2])
-                st.markdown("---")
-                st.image(image_url[2])
-                st.markdown("---")
-                st.write("Read full article here.", url[2])
-                st.markdown("---")
-                st.write(news_summarizer(url[2]))
+        st.subheader("Latest News")
 
+        for i, article in enumerate(articles):
+            title_item = article.get("title", "No Title")
+            url_item = article.get("url", "")
+            img_item = article.get("urlToImage", None)
 
-            with col4:
-                st.subheader(title[3])
-                st.markdown("---")
-                st.image(image_url[3])
-                st.markdown("---")
-                st.write("Read full article here.", url[3])
-                st.markdown("---")
-                st.write(news_summarizer(url[3]))
+            # Fix invalid or missing images
+            if not img_item or img_item.endswith(".gif"):
+                img_item = "https://via.placeholder.com/400x250.png?text=No+Image"
 
+            with st.container():
+                st.markdown(f"### 📰 {title_item}")
+                st.image(img_item, use_container_width=True)
+                st.write("🔗 Read Article:", url_item)
+                st.write("📝 Summary:", news_summarizer(url_item))
+                st.markdown("---")
 
-            with col5:
-                st.subheader(title[4])
-                st.markdown("---")
-                st.image(image_url[4])
-                st.markdown("---")
-                st.write("Read full article here.", url[4])
-                st.markdown("---")
-                st.write(news_summarizer(url[4]))
+    else:
+        st.error("Please enter an interest topic.")
 
-        else:
-            st.error("Please enter an area of interest")
 
 
 def smart_planner():
@@ -237,4 +207,5 @@ elif page_option == "News by Interest":
 elif page_option == "Plan My Day":
     smart_planner()
     
+
     
